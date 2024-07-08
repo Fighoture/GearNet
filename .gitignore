@@ -131,4 +131,7 @@ dmypy.json
 .pyre/
 
 # ide
-.idea/*
+.idea/
+
+# script help
+script_help.txt

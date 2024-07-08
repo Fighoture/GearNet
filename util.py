@@ -147,7 +147,7 @@ def build_downstream_solver(cfg, dataset):
         solver.scheduler = scheduler
 
     if cfg.get("checkpoint") is not None:
-        solver.load(cfg.checkpoint)
+        solver.load(cfg.checkpoint, load_optimizer=cfg.load_optimizer)
 
     if cfg.get("model_checkpoint") is not None:
         if comm.get_rank() == 0:
