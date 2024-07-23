@@ -154,6 +154,30 @@ def build_downstream_solver(cfg, dataset):
             logger.warning("Load checkpoint from %s" % cfg.model_checkpoint)
         cfg.model_checkpoint = os.path.expanduser(cfg.model_checkpoint)
         model_dict = torch.load(cfg.model_checkpoint, map_location=torch.device('cpu'))
+
+        # model state weight synchronize
+        for param_name, param in task.model.named_parameters():
+            state_param = model_dict.get(param_name, None)
+            if state_param is None:
+                raise ValueError(f"Cannot find {param_name} weight in model checkpoint.")
+
+            if param.size() != state_param.size():
+                print(f"Weight '{param_name}' is not match.")
+                if param.size(1) % state_param.size(1) != 0:
+                    raise ValueError(f"Model cannot load weight {param_name} due to unmatched model weight!")
+
+                # duplicate weight
+                # duplicate = param.size(1) // state_param.size(1)
+                # final_state_param = torch.cat([state_param for _ in range(duplicate)], dim=1)
+                # model_dict[param_name] = final_state_param
+                # print(f"Weight '{param_name}' has been duplicated by {duplicate}*.")
+
+                # random weight
+                supplemental_param = torch.randn((state_param.size(0), param.size(1) - state_param.size(1))) * 0.01
+                final_state_param = torch.cat([state_param, supplemental_param], dim=1)
+                model_dict[param_name] = final_state_param
+                print(f"Weight '{param_name}' has been supplemented.")
+
         task.model.load_state_dict(model_dict)
     
     return solver, scheduler
