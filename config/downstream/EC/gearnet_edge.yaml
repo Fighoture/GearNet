@@ -23,8 +23,9 @@ task:
     num_relation: 7
     edge_input_dim: 59
     num_angle_bin: 8
-    line_graph_dimension: 2
     filter: True
+    transformer_heads: 8
+    line_graph_dimension: 2
   graph_construction_model:
     class: GraphConstruction
     node_layers:

@@ -1,6 +1,7 @@
 import os
 import time
 import logging
+import warnings
 import argparse
 
 import yaml
@@ -156,9 +157,14 @@ def build_downstream_solver(cfg, dataset):
         model_dict = torch.load(cfg.model_checkpoint, map_location=torch.device('cpu'))
 
         # model state weight synchronize
+        strict = True
         for param_name, param in task.model.named_parameters():
             state_param = model_dict.get(param_name, None)
             if state_param is None:
+                strict = False
+                if "trans_" in param_name:
+                    warnings.warn("Transformers layers are not in pretrained model.", UserWarning)
+                    continue
                 raise ValueError(f"Cannot find {param_name} weight in model checkpoint.")
 
             if param.size() != state_param.size():
@@ -176,9 +182,9 @@ def build_downstream_solver(cfg, dataset):
                 supplemental_param = torch.randn((state_param.size(0), param.size(1) - state_param.size(1))) * 0.01
                 final_state_param = torch.cat([state_param, supplemental_param], dim=1)
                 model_dict[param_name] = final_state_param
-                print(f"Weight '{param_name}' has been supplemented.")
+                print(f"Weight '{param_name}' has been randomly initialized.")
 
-        task.model.load_state_dict(model_dict)
+        task.model.load_state_dict(model_dict, strict=strict)
     
     return solver, scheduler
 
