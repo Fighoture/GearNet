@@ -133,5 +133,3 @@ dmypy.json
 # ide
 .idea/
 
-# script help
-script_help.txt

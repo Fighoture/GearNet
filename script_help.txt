@@ -1,0 +1,4 @@
+python script/downstream.py -c config/downstream/EC/gearnet_edge.yaml --gpus [0] --ckpt <path_to_your_model>
+python -m torch.distributed.launch --nproc_per_node=2 script/downstream.py -c config/downstream/EC/gearnet_edge.yaml --gpus [0,1] --ckpt <path_to_your_model>
+
+path_to_your_model: https://zenodo.org/records/7593637
