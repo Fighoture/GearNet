@@ -1,8 +1,8 @@
-output_dir: ~/autodl-tmp/scratch/protein-output/
+output_dir: ~/Documents/job/GZintern/GearNet/output/protein-output/
 
 dataset:
   class: EnzymeCommission
-  path: ~/autodl-tmp/scratch/protein-datasets/
+  path: ~/Documents/job/GZintern/GearNet/output/protein-datasets/
   test_cutoff: 0.95
   atom_feature: null
   bond_feature: null
@@ -23,8 +23,8 @@ task:
     num_relation: 7
     edge_input_dim: 59
     num_angle_bin: 8
-    filter: True
-    transformer_heads: 1
+    filter: 0.3
+    transformer_heads: 2
     line_graph_dimension: 2
   graph_construction_model:
     class: GraphConstruction

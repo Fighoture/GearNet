@@ -133,3 +133,6 @@ dmypy.json
 # ide
 .idea/
 
+# data
+output/
+weight/
