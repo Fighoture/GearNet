@@ -1,8 +1,8 @@
-output_dir: ~/Documents/job/GZintern/GearNet/output/protein-output/
+output_dir: ~/autodl-tmp/scratch/protein-output/
 
 dataset:
   class: EnzymeCommission
-  path: ~/Documents/job/GZintern/GearNet/output/protein-datasets/
+  path: ~/autodl-tmp/scratch//protein-datasets/
   test_cutoff: 0.95
   atom_feature: null
   bond_feature: null
